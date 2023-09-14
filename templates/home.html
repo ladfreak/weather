@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="container-fulid well">
+<h3 class="offset-5 col-5 text-primary" style="padding-top: 25px;"><i class="fa fa-bolt"> Weather Forecast</i></h3>
+</div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="offset-4 col-4">
+                            <div class="alert alert-danger">
+                                {{ message }}
+                            </div>
+                    </div>
+                    {% else %}
+                    <div class="offset-4 col-4">
+                            <div class="alert alert-{{message.tags}}">
+                                {{ message }}
+                            </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <div class="container">
+                <div class="offset-4 col-4">
+                <form method="post" >
+                    {% csrf_token %}
+                    {{ form }} <button type="submit" class="btn btn-primary pull-right">Search</button>
+                </form> 
+    <br><hr>
+    {% for city_weather in data %}
+    <div class="shadow media">
+        <div class="media-left">
+            <a href="#">
+                <img src="http://openweathermap.org/img/w/{{city_weather.icon}}.png" class="media-object" alt="image">
+            </a>
+            <div class="pull-right">
+                <h3><a href="{% url 'city_remove' city_weather.city %}" class="text-danger" style="text-decoration: none;">&#x2718;</a></h3>
+            </div>
+        </div>
+        <div class="media-body">
+            <h3 class="media-heading"><b>{{city_weather.city}}</b></h3>
+            <h5>{{city_weather.temperature}}</h5>
+            <h5>{{city_weather.description}}</h5>
+            <h5>{{city_weather.country}}</h5>
+        </div><br>
+    </div><br>
+    {% endfor %}
+</div>
+</div>
+
+{% endblock %}
